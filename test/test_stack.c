@@ -1,4 +1,4 @@
-#include "unity/unity.h"
+#include "unity.h"
 #include "stack.h"
 
 void setUp(void) {
