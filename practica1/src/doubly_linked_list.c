@@ -4,37 +4,30 @@
 #include "doubly_linked_list.h"
 
 /**
- * @brief Función para crear y devolver un nuevo nodo
-
+ * @brief Create and return a new node with the given value.
  *
- * @param value
- * @return DList
+ * @param value The value to store in the new node.
+ * @return A pointer to the newly created node.
  */
-
-DList createNode(const char *value)
-{
-    DList newNode = (DList)malloc(sizeof(struct Node));
+DoublyLinkedList createNode(const char *value) {
+    DoublyLinkedList newNode = (DoublyLinkedList)malloc(sizeof(Node));
     newNode->data = value;
     newNode->prev = NULL;
     newNode->next = NULL;
     return newNode;
 }
-/**
- * @brief Inserción al frente (al principio)
- *
- * @param head
- * @param value
- */
 
-void insertAtFront(DList *head, const char *value)
-{
-    DList newNode = createNode(value);
-    if (*head == NULL)
-    {
+/**
+ * @brief Insert a new node with the given value at the front of the list.
+ *
+ * @param head A pointer to the head of the list.
+ * @param value The value to insert at the front.
+ */
+void insertAtFront(DoublyLinkedList *head, const char *value) {
+    DoublyLinkedList newNode = createNode(value);
+    if (*head == NULL) {
         *head = newNode;
-    }
-    else
-    {
+    } else {
         newNode->next = *head;
         (*head)->prev = newNode;
         *head = newNode;
@@ -42,23 +35,18 @@ void insertAtFront(DList *head, const char *value)
 }
 
 /**
- * @brief   Inserción al final
+ * @brief Insert a new node with the given value at the end of the list.
  *
- * @param head
- * @param value
+ * @param head A pointer to the head of the list.
+ * @param value The value to insert at the end.
  */
-void insertAtEnd(DList *head, const char *value)
-{
-    DList newNode = createNode(value);
-    if (*head == NULL)
-    {
+void insertAtEnd(DoublyLinkedList *head, const char *value) {
+    DoublyLinkedList newNode = createNode(value);
+    if (*head == NULL) {
         *head = newNode;
-    }
-    else
-    {
-        DList temp = *head;
-        while (temp->next != NULL)
-        {
+    } else {
+        DoublyLinkedList temp = *head;
+        while (temp->next != NULL) {
             temp = temp->next;
         }
         temp->next = newNode;
@@ -67,245 +55,182 @@ void insertAtEnd(DList *head, const char *value)
 }
 
 /**
- * @brief Eliminación de un elemento desde el frente
+ * @brief Insert a new node with the given value after a specified node.
  *
- * @param head
+ * @param head A pointer to the head of the list.
+ * @param existingValue The value of the existing node to insert after.
+ * @param newValue The value to insert.
  */
-void deleteFromFront(DList *head)
-{
-    if (*head != NULL)
-    {
-        DList temp = *head;
+void insertAfter(DoublyLinkedList *head, const char *existingValue, const char* newValue) {
+    DoublyLinkedList temp = *head;
+    while (temp != NULL && strcmp(temp->data, existingValue) != 0) {
+        temp = temp->next;
+    }
+    if (temp != NULL) {
+        DoublyLinkedList newNode = createNode(newValue);
+        newNode->next = temp->next;
+        newNode->prev = temp;
+        if (temp->next != NULL) {
+            temp->next->prev = newNode;
+        }
+        temp->next = newNode;
+    }
+}
+
+/**
+ * @brief Insert a new node with the given value before a specified node.
+ *
+ * @param head A pointer to the head of the list.
+ * @param existingValue The value of the existing node to insert before.
+ * @param newValue The value to insert.
+ */
+void insertBefore(DoublyLinkedList* head, const char *existingValue, const char* newValue) {
+    DoublyLinkedList temp = *head;
+    while (temp != NULL && strcmp(temp->data, existingValue) != 0) {
+        temp = temp->next;
+    }
+    if (temp != NULL) {
+        DoublyLinkedList newNode = createNode(newValue);
+        newNode->next = temp;
+        newNode->prev = temp->prev;
+        if (temp->prev != NULL) {
+            temp->prev->next = newNode;
+        } else {
+            *head = newNode;
+        }
+        temp->prev = newNode;
+    }
+}
+
+/**
+ * @brief Delete the node at the front of the list.
+ *
+ * @param head A pointer to the head of the list.
+ */
+void deleteFromFront(DoublyLinkedList *head) {
+    if (*head != NULL) {
+        DoublyLinkedList temp = *head;
         *head = (*head)->next;
-        if (*head != NULL)
-        {
+        if (*head != NULL) {
             (*head)->prev = NULL;
         }
         free(temp);
     }
 }
 
-// Función para imprimir la lista
-void printList(DList head)
-{
-    DList current = head;
-    if (current == NULL)
-    {
-        printf("Lista vacia\n");
-    }
-    else
-    {
-        while (current != NULL)
-        {
+/**
+ * @brief Print the entire list.
+ *
+ * @param head The head of the list.
+ */
+void printList(DoublyLinkedList head) {
+    DoublyLinkedList current = head;
+    if (current == NULL) {
+        printf("Empty list\n");
+    } else {
+        while (current != NULL) {
             printf("%s ", current->data);
             current = current->next;
         }
     }
     printf("\n");
 }
+
 /**
- * @brief  Devuelvo el puntero que tiene la canción
- *          o NULL si no existe
+ * @brief Delete a node with the specified value from the list.
  *
- * @param head
- * @param value
- * @return DList
+ * @param head A pointer to the head of the list.
+ * @param value The value of the node to delete.
+ * @return 1 if the node was deleted, 0 if the node was not found.
  */
-DList FindNode(DList head, const char *value)
-{
-    DList current;
-    current = head;
-    while (current != NULL && (strcmp(value, current->data) != 0))
-    {
-        current = current->next;
+int deleteNode(DoublyLinkedList *head, const char *value) {
+    DoublyLinkedList temp = *head;
+    while (temp != NULL && strcmp(temp->data, value) != 0) {
+        temp = temp->next;
     }
-    return current;
+    if (temp != NULL) {
+        if (temp->prev != NULL) {
+            temp->prev->next = temp->next;
+        } else {
+            *head = temp->next;
+        }
+        if (temp->next != NULL) {
+            temp->next->prev = temp->prev;
+        }
+        free(temp);
+        return 1;
+    }
+    return 0;
 }
 
 /**
- * @brief Elimina el nodo que contenga la canción value
+ * @brief Insert a node in an ordered manner in the list.
  *
- * @param list
- * @param value
- * @return int
+ * @param head A pointer to the head of the list.
+ * @param value The value to insert in order.
  */
-//
-int deleteNode(DList *list, const char *value)
-{
-    DList current;
-    ;
-    DList prev = NULL;
-    int found = 0;
-
-    current = FindNode(*list, value);
-    if (current == NULL)
-    {
-        printf("Elemento no existe.\n");
-        found = 0;
+void insertOrdered(DoublyLinkedList* head, const char* value) {
+    if (*head == NULL || strcmp((*head)->data, value) >= 0) {
+        insertAtFront(head, value);
+    } else {
+        DoublyLinkedList temp = *head;
+        while (temp->next != NULL && strcmp(temp->next->data, value) < 0) {
+            temp = temp->next;
+        }
+        DoublyLinkedList newNode = createNode(value);
+        newNode->next = temp->next;
+        newNode->prev = temp;
+        if (temp->next != NULL) {
+            temp->next->prev = newNode;
+        }
+        temp->next = newNode;
     }
-    else
-    {
+}
 
-        if (current == *list)
-        {
-            *list = current->next;
-            (*list)->prev = NULL;
-        }
-        else
-        {
-            prev->next = current->next;
-            current->next->prev = prev;
-        }
+/**
+ * @brief Sort the list using bubble sort.
+ *
+ * @param head A pointer to the head of the list.
+ */
+void sortList(DoublyLinkedList* head) {
+    if (*head == NULL) {
+        return;
+    }
+    int swapped;
+    DoublyLinkedList ptr1;
+    DoublyLinkedList lptr = NULL;
 
-        // Free memory of the deleted node
+    do {
+        swapped = 0;
+        ptr1 = *head;
+
+        while (ptr1->next != lptr) {
+            if (strcmp(ptr1->data, ptr1->next->data) > 0) {
+                const char *temp = ptr1->data;
+                ptr1->data = ptr1->next->data;
+                ptr1->next->data = temp;
+                swapped = 1;
+            }
+            ptr1 = ptr1->next;
+        }
+        lptr = ptr1;
+    } while (swapped);
+}
+
+/**
+ * @brief Delete all nodes in the list.
+ *
+ * @param head A pointer to the head of the list.
+ */
+void deleteAll(DoublyLinkedList *head) {
+    DoublyLinkedList current = *head;
+    DoublyLinkedList next;
+
+    while (current != NULL) {
+        next = current->next;
         free(current);
-        found = 1;
-    }
-    return found;
-}
-
-/**
- * @brief Inserción después de una canción
- *
- * @param head
- * @param cancion: Canción existente en la lista
- * @param value: Nueva canción a añadir
-
- */
-void insertAfter(DList *head, const char *cancion, const char *value)
-{
-
-    DList node, newnode;
-    node = FindNode(*head, cancion);
-    if (node != NULL)
-    {
-        newnode = createNode(value);
-        newnode->next = node->next;
-        newnode->prev = node;
-        // Si el nuevo nodo no es el último
-        if (node->next != NULL)
-        {
-            node->next->prev = newnode;
-        }
-        node->next = newnode;
-    }
-}
-
-/**
- * @brief Inserción después de una canción
- *
- * @param head
- * @param cancion: Canción existente en la lista
- * @param value: Nueva canción a añadir
-
- */
-void insertBefore(DList *head, const char *cancion, const char *value)
-{
-
-    DList node, newnode;
-    node = FindNode(*head, cancion);
-    if (node != NULL)
-    {
-        newnode = createNode(value);
-        newnode->next = node;
-        newnode->prev = node->prev;
-        // Si no va antes del primero
-        if (node != *head)
-        {
-            node->prev->next = newnode;
-            node->prev = newnode;
-        }
-        else
-        {
-            node->prev = newnode;
-            *head = newnode;
-        }
-    }
-}
-
-// Función para insertar un nodo de manera ordenada
-void insertarOrdenado(DList *lista, const char *valor)
-{
-    DList nuevoNodo = createNode(valor);
-
-    if (*lista == NULL)
-    {
-        // Si la lista está vacía, el nuevo nodo es el único elemento
-        *lista = nuevoNodo;
-    }
-    else
-    {
-        DList actual = *lista;
-        while (actual->next != NULL && strcmp(actual->data, valor) < 0)
-        {
-            actual = actual->next;
-        }
-
-        // Insertar el nuevo nodo antes o después del actual según el orden
-        if (strcmp(actual->data, valor) < 0)
-        {
-            nuevoNodo->prev = actual;
-            actual->next = nuevoNodo;
-        }
-        else
-        {
-            nuevoNodo->next = actual;
-            nuevoNodo->prev = actual->prev;
-            if (actual->prev != NULL)
-            {
-                actual->prev->next = nuevoNodo;
-            }
-            else
-            {
-                *lista = nuevoNodo;
-            }
-            actual->prev = nuevoNodo;
-        }
-    }
-}
-
-// Función para ordenar la lista utilizando el algoritmo de burbuja
-void ordenarLista(DList *lista)
-{
-    int intercambiado;
-    struct Node *actual;
-    struct Node *siguiente = NULL;
-
-    if (*lista == NULL)
-    {
-        return; // La lista está vacía, no hay nada que ordenar
+        current = next;
     }
 
-    do
-    {
-        intercambiado = 0;
-        actual = *lista;
-
-        while (actual->next != siguiente)
-        {
-            if (strcmp(actual->data, actual->next->data) > 0)
-            {
-                // Intercambiar nodos si están en el orden incorrecto
-                const char *temp = actual->data;
-                actual->data = actual->next->data;
-                actual->next->data = temp;
-                intercambiado = 1;
-            }
-            actual = actual->next;
-        }
-        siguiente = actual;
-    } while (intercambiado);
-}
-
-/**
- * @brief Borro todos los elementos de la lista
- *
- * @param head
- */
-void DeleteAll(DList *head)
-{
-    while (*head != NULL)
-    {
-        deleteFromFront(head);
-    }
+    *head = NULL;
 }

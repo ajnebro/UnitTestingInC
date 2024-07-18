@@ -2,55 +2,57 @@
 #include <stdlib.h>
 #include "doubly_linked_list.h"
 
-int main(void) {
-    DList myList = NULL;
-    printf("****Inserto canciones al principio y al final\n");
+/**
+ * @brief The main function demonstrates various operations on the doubly linked list.
+ *
+ * @return Exit status code.
+ */
+int main() {
+    DoublyLinkedList head = NULL;
 
-    printf("****Inserto cancion2 al principio \n");
-    insertAtFront(&myList, "cancion2");
-    printList(myList);
+    // Demonstrating insertion at the front
+    insertAtFront(&head, "World");
+    insertAtFront(&head, "Hello");
+    printf("List after inserting 'Hello' and 'World' at the front: ");
+    printList(head);
 
-    printf("****Inserto cancion1 al principio\n");
-    insertAtFront(&myList, "cancion1");
-    printList(myList);
+    // Demonstrating insertion at the end
+    insertAtEnd(&head, "!");
+    printf("List after inserting '!' at the end: ");
+    printList(head);
 
-    printf("Inserto cancion3 al final\n");
-    insertAtEnd(&myList, "cancion3");
-    printList(myList);
+    // Demonstrating insertion in an ordered manner
+    insertOrdered(&head, "A");
+    insertOrdered(&head, "Z");
+    insertOrdered(&head, "M");
+    printf("List after ordered insertions of 'A', 'Z', 'M': ");
+    printList(head);
 
-    printf("Inserto cancion4 al final\n");
-    insertAtEnd(&myList, "cancion4");
-    printList(myList);
+    // Demonstrating deletion of a node
+    deleteNode(&head, "Z");
+    printf("List after deleting 'Z': ");
+    printList(head);
 
-    printf("Inserto una canción despues de cancion2\n");
-    insertAfter(&myList,"cancion2","otracancion2");
-    printList(myList);
+    // Demonstrating insertion before and after a specific node
+    insertBefore(&head, "M", "B");
+    insertAfter(&head, "M", "Y");
+    printf("List after inserting 'B' before 'M' and 'Y' after 'M': ");
+    printList(head);
 
-    printf("Inserto una canción antes de cancion1\n");
-    insertBefore(&myList,"cancion1","otracancion1"); 
-    printList(myList);
+    // Demonstrating deletion from the front
+    deleteFromFront(&head);
+    printf("List after deleting from the front: ");
+    printList(head);
 
+    // Demonstrating sorting the list
+    sortList(&head);
+    printf("List after sorting: ");
+    printList(head);
 
-    ordenarLista(&myList);
-    printList(myList);
-
-
-    printf("Borro la cancion1\n");
-    deleteNode(&myList, "cancion1");
-    printList(myList);
-
-    printf("Borro la cancion no existe\n");
-    deleteNode(&myList, "no existe");
-    printList(myList);
-
-    printf("Elimino el primero\n");
-    deleteFromFront(&myList);
-    printList(myList);
-
-    printf("Elimino todos\n");
-    DeleteAll (&myList);
-    printList(myList);
-
+    // Demonstrating deleting all nodes
+    deleteAll(&head);
+    printf("List after deleting all nodes: ");
+    printList(head);
 
     return 0;
 }

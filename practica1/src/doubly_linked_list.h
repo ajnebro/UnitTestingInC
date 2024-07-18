@@ -1,121 +1,97 @@
-// doubly_linked_list.h
-
 #ifndef DOUBLY_LINKED_LIST_H
 #define DOUBLY_LINKED_LIST_H
 
-/**
- * @brief Estructura para un nodo de la lista
- * 
- */
- 
-struct Node {
-    const char* data;
-    struct Node* prev;
-    struct Node* next;
-};
+typedef struct Node {
+    const char *data;
+    struct Node *prev;
+    struct Node *next;
+} Node, *DoublyLinkedList;
 
 /**
- * @brief Definición del tipo
- * 
+ * @brief Create and return a new node with the given value.
+ *
+ * @param value The value to store in the new node.
+ * @return A pointer to the newly created node.
  */
-typedef struct Node * DList;
+DoublyLinkedList createNode(const char* value);
 
 /**
- * @brief Función para crear un nuevo nodo. Devuelve
- * un puntero al nodo creado.
- * 
- * @param value 
- * @return DList 
+ * @brief Insert a new node with the given value at the front of the list.
+ *
+ * @param head A pointer to the head of the list.
+ * @param value The value to insert at the front.
  */
-DList createNode(const char* value);
-
-// 
-/**
- * @brief Inserción al frente (al principio)
- * 
- * @param head 
- * @param value 
- */
-void insertAtFront(DList* head, const char* value);
+void insertAtFront(DoublyLinkedList* head, const char* value);
 
 /**
- * @brief  Inserción al final. 
- * Lo inserta como último elemento
- * 
- * @param head 
- * @param value 
+ * @brief Insert a new node with the given value at the end of the list.
+ *
+ * @param head A pointer to the head of the list.
+ * @param value The value to insert at the end.
  */
-void insertAtEnd(DList* head, const char* value);
+void insertAtEnd(DoublyLinkedList* head, const char* value);
 
 /**
- * @brief Inserción después de una canción. Busca una
- * canción y si existe añade un nuevo nodo con la nueva canción
- * después de la canción existente. 
- * 
- * @param head 
- * @param cancion: Canción existente en la lista 
- * @param value: Nueva canción a añadir 
-
+ * @brief Insert a new node with the given value after a specified node.
+ *
+ * @param head A pointer to the head of the list.
+ * @param existingValue The value of the existing node to insert after.
+ * @param newValue The value to insert.
  */
-void insertAfter(DList *head, const char *cancion, const char* value);
+void insertAfter(DoublyLinkedList *head, const char *existingValue, const char* newValue);
 
 /**
-* @brief Inserción antes de una canción. Busca una
- * canción y si existe añade un nuevo nodo con la nueva canción
- * antes de la canción existente. 
- * 
- * 
- * @param head 
- * @param cancion: Canción existente en la lista 
- * @param value: Nueva canción a añadir 
+ * @brief Insert a new node with the given value before a specified node.
+ *
+ * @param head A pointer to the head of the list.
+ * @param existingValue The value of the existing node to insert before.
+ * @param newValue The value to insert.
  */
-void insertBefore(DList* head, const char *cancion, const char* value);
+void insertBefore(DoublyLinkedList* head, const char *existingValue, const char* newValue);
 
 /**
- * @brief Eliminación desde el frente. Se eliminan
- * todos los nodos por el primero de la lista.
- * 
- * @param head 
+ * @brief Delete the node at the front of the list.
+ *
+ * @param head A pointer to the head of the list.
  */
-void deleteFromFront(DList* head);
+void deleteFromFront(DoublyLinkedList* head);
 
 /**
- * @brief Mostrar toda lista
- * 
- * @param head 
+ * @brief Print the entire list.
+ *
+ * @param head The head of the list.
  */
-void printList (DList head);
+void printList(DoublyLinkedList head);
 
 /**
- * @brief Borrar un elemento de la lista si existe.
- * Devuelve 1 si lo borra, 0 si no existe la canción
- * 
- * @param list 
- * @param value 
- * @return int 
+ * @brief Delete a node with the specified value from the list.
+ *
+ * @param head A pointer to the head of the list.
+ * @param value The value of the node to delete.
+ * @return 1 if the node was deleted, 0 if the node was not found.
  */
-int deleteNode(DList *list, const char *value);
+int deleteNode(DoublyLinkedList *head, const char *value);
 
 /**
- * @brief Procedimiento para insertar un nodo de manera ordenada
- *  
- * @param lista 
- * @param valor 
+ * @brief Insert a node in an ordered manner in the list.
+ *
+ * @param head A pointer to the head of the list.
+ * @param value The value to insert in order.
  */
-void insertarOrdenado(DList* lista, const char* valor);
+void insertOrdered(DoublyLinkedList* head, const char* value);
 
 /**
- * @brief Procedimiento para ordenar la lista utilizando el algoritmo de burbuja 
- * 
- * @param lista 
+ * @brief Sort the list using bubble sort.
+ *
+ * @param head A pointer to the head of the list.
  */
-void ordenarLista(DList* lista);
+void sortList(DoublyLinkedList* head);
 
 /**
- * @brief Borro todos los elementos de la lista
- * 
- * @param head 
+ * @brief Delete all nodes in the list.
+ *
+ * @param head A pointer to the head of the list.
  */
-void DeleteAll (DList *head);
+void deleteAll(DoublyLinkedList *head);
 
 #endif // DOUBLY_LINKED_LIST_H
