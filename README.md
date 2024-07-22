@@ -6,3 +6,5 @@ The examples include:
 
 * Stack
 * Doubly linked list 
+
+For building the project we use both make and CMake
